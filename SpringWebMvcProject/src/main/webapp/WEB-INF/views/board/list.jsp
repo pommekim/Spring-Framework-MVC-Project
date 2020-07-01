@@ -121,7 +121,9 @@ header.masthead {
 		//글쓰기 완료시 띄울 알림창 처리.
 		const result = "${message}";
 		if(result === "insertSuccess") {
-			alert("게시글 등록이 완료되었습니다.")
+			alert("게시글 등록이 완료되었습니다.");
+		} else if(result === "deleteSuccess") {
+			alert("게시글 삭제가 완료되었습니다.");
 		}
 	</script>
 	

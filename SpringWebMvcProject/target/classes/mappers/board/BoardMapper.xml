@@ -26,6 +26,13 @@
 		ORDER BY board_no DESC
 	</select>
 	
+	<select id="getArticleListPaging" resultMap="boardMap">
+		SELECT * 
+		FROM mvc_board 
+		ORDER BY board_no DESC 
+		LIMIT #{page}, 10
+	</select>
+	
 	<select id="getArticle" resultMap="boardMap">
 		SELECT *
 		FROM mvc_board

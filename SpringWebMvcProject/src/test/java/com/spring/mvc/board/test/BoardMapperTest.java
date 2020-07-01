@@ -82,6 +82,18 @@ public class BoardMapperTest {
 		}
 	}
 	
+	//페이징 단위 테스트
+	@Test
+	public void pagingTest() {
+		System.out.println("----------------------------------------------");
+		mapper.getArticleListPaging(1).forEach(vo -> System.out.println(vo));
+		System.out.println("----------------------------------------------");
+	}
+	
+	
+	
+	
+	
 	
 	
 	
