@@ -30,7 +30,12 @@
 		SELECT * 
 		FROM mvc_board 
 		ORDER BY board_no DESC 
-		LIMIT #{page}, 10
+		LIMIT #{pageStart}, #{countPerPage}
+	</select>
+	
+	<select id="countArticles" resultType="int">
+		SELECT COUNT(*)
+		FROM mvc_board
 	</select>
 	
 	<select id="getArticle" resultMap="boardMap">

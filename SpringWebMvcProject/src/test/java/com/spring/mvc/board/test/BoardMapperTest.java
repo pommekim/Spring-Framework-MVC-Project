@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.spring.mvc.board.model.BoardVO;
 import com.spring.mvc.board.repository.IBoardMapper;
+import com.spring.mvc.commons.PageVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/mvc-config.xml"})
@@ -86,7 +87,11 @@ public class BoardMapperTest {
 	@Test
 	public void pagingTest() {
 		System.out.println("----------------------------------------------");
-		mapper.getArticleListPaging(1).forEach(vo -> System.out.println(vo));
+		PageVO paging = new PageVO();
+		paging.setPage(2);
+		paging.setCountPerPage(10);
+		
+		mapper.getArticleListPaging(paging).forEach(vo -> System.out.println(vo));
 		System.out.println("----------------------------------------------");
 	}
 	

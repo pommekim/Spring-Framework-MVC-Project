@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.mvc.board.model.BoardVO;
 import com.spring.mvc.board.service.IBoardService;
+import com.spring.mvc.commons.PageVO;
 
 @Controller
 @RequestMapping("/board")
@@ -32,11 +33,11 @@ public class BoardController {
 	
 	//페이징 처리 이후 게시글 목록 불러오기 요청.
 	@GetMapping("/list")
-	public String list(Model model, int page) {
-		List<BoardVO> list = service.getArticleListPaging(page);
+	public String list(Model model, PageVO paging) {
+		List<BoardVO> list = service.getArticleListPaging(paging);
 		
 		System.out.println("URL: /board/list GET -> result: " + list.size());
-		System.out.println("parameter(페이지 번호): " + page);
+		System.out.println("parameter(페이지 번호): " + paging);
 		model.addAttribute("articles", list);
 		
 		return "board/list";

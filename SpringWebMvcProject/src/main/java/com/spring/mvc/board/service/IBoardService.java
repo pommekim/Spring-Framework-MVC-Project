@@ -3,6 +3,7 @@ package com.spring.mvc.board.service;
 import java.util.List;
 
 import com.spring.mvc.board.model.BoardVO;
+import com.spring.mvc.commons.PageVO;
 
 public interface IBoardService {
 
@@ -13,7 +14,7 @@ public interface IBoardService {
 	List<BoardVO> getArticleList();
 	
 	//게시글 페이징 목록 조회 기능
-	List<BoardVO> getArticleListPaging(int page);
+	List<BoardVO> getArticleListPaging(PageVO paging);
 
 	//게시글 상세 조회 기능
 	BoardVO getArticle(int boardNo);
