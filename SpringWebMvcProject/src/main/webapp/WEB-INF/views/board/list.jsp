@@ -17,6 +17,10 @@ header.masthead {
 	background-color: #643691;
 	color: white;
 }
+
+.page-active{
+	background-color: #643691;
+}
 </style>
 
 <br><br> 
@@ -55,7 +59,7 @@ header.masthead {
 								<td>${a.boardNo}</td>
 								<td>${a.writer}</td>
 
-								<td><a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content/${a.boardNo}'/>">
+								<td><a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content/${a.boardNo}?page=${pc.paging.page}&countPerPage=${pc.paging.countPerPage}'/>">
 										${a.title}
 									</a>
 								</td>
@@ -73,23 +77,27 @@ header.masthead {
 					<ul class="pagination justify-content-center">
 					
 						<!-- 이전 버튼 -->
-                       	<li class="page-item">
-							<a class="page-link" href="#" 
-							style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">이전</a>
-						</li>
+						<c:if test="${pc.prev}">
+	                       	<li class="page-item">
+								<a class="page-link" href="<c:url value='/board/list?page=${pc.beginPage-1}&countPerPage=${pc.paging.countPerPage}' />" 
+								style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">이전</a>
+							</li>
+						</c:if>
 						
 						<!-- 페이지 버튼 -->
-						<c:forEach var="pageNum" begin="1" end="10">
-						<li class="page-item">
-						   <a href="<c:url value='/board/list?page=${pageNum}'/>" class="page-link" style="margin-top: 0; height: 40px; color: pink; border: 1px solid #643691;">${pageNum}</a>
-						</li>
+						<c:forEach var="pageNum" begin="${pc.beginPage}" end="${pc.endPage}">
+							<li class="page-item">
+							   <a href="<c:url value='/board/list?page=${pageNum}&countPerPage=${pc.paging.countPerPage}'/>" class="page-link ${(pc.paging.page == pageNum) ? 'page-active' : ''}" style="margin-top: 0; height: 40px; color: pink; border: 1px solid #643691;">${pageNum}</a>
+							</li>
 					    </c:forEach>
 					   
 					    <!-- 다음 버튼 -->
-					    <li class="page-item">
-					      <a class="page-link" href="#" 
-					      style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">다음</a>
-					    </li>
+					    <c:if test="${pc.next}">
+						    <li class="page-item">
+						      <a class="page-link" href="<c:url value='/board/list?page=${pc.endPage+1}&countPerPage=${pc.paging.countPerPage}' />" 
+						      style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">다음</a>
+						    </li>
+					    </c:if>
 				    </ul>
 				    
 					<!-- 페이징 처리 끝 -->
@@ -138,13 +146,30 @@ header.masthead {
 		//start jQuery
 		$(function() {
 			//목록 갯수가 변동하는 이벤트 처리
-			$("#count-per-page .btn-izone").click(function() {
+			$("#count-per-page .btn-izone").click(function () {
 				//console.log("목록 버튼이 클릭됨!");
 				//this는 클릭의 주체가 되는 객체
 				//console.log($(this).val());
 				let count = $(this).val();
-				location.href='/board/list?countPerPage='+count;
+				location.href='/board/list?page=${pc.paging.page}&countPerPage='+count;
 			});
+			
+			//검색 버튼 이벤트 처리
+			$("#searchBtn").click(function () {
+				console.log("검색 버튼이 클릭됨!")
+				const keyword = $("#keywordInput").val();
+				console.log("검색어: " + keyword);
+				location.href="/board/list?keyword=" + keyword;
+			});
+			
+			//엔터키 입력 이벤트
+			$("#keywordInput").keydown(function (key) {
+				if(key.keyCode == 13) { //키가 13번이면 실행 (엔터 -> 13)
+					$("#searchBtn").click();
+				}
+			});
+			
+			
 			
 		}); //end jQuery
 		

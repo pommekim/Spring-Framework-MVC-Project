@@ -33,6 +33,19 @@
 		LIMIT #{pageStart}, #{countPerPage}
 	</select>
 	
+	<select id="getArticleListByTitle" resultMap="boardMap">
+		SELECT *
+		FROM mvc_board
+		WHERE title LIKE CONCAT('%', #{keyword}, '%')
+		LIMIT #{pageStart}, #{countPerPage}
+	</select>
+	
+	<select id="countArticlesByTitle" resultType="int">
+		SELECT COUNT(*)
+		FROM mvc_board
+		WHERE title LIKE CONCAT('%', #{keyword}, '%')
+	</select>
+	
 	<select id="countArticles" resultType="int">
 		SELECT COUNT(*)
 		FROM mvc_board

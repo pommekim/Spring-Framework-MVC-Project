@@ -24,13 +24,13 @@ public class PageCreator {
 		beginPage = (endPage - displayPageNum) + 1;
 		
 		//현재 시작 페이지가 1이라면 이전 버튼 활성화 여부를 false로 지정
-		prev = (beginPage == 1) ? true : false;
+		prev = (beginPage == 1) ? false : true;
 		
 		//마지막 페이지인지 여부 확인 후 다음 버튼 비활성화 판단
-		next = (articleTotalCount <= endPage * paging.getCountPerPage()) ? true : false;
+		next = (articleTotalCount <= (endPage * paging.getCountPerPage())) ? false : true;
 		
 		//다음 버튼 비활성화라면 끝 페이지 재보정 하기
-		if(!next) {
+		if(!isNext()) {
 			endPage = (int) Math.ceil(articleTotalCount / (double) paging.getCountPerPage());
 		}
 		
@@ -50,8 +50,10 @@ public class PageCreator {
 		return articleTotalCount;
 	}
 
+	//총 게시물 수를 얻어올 때 위의 페이징 알고리즘 메서드 호출!!!
 	public void setArticleTotalCount(int articleTotalCount) {
 		this.articleTotalCount = articleTotalCount;
+		calcDataOfPage();
 	}
 
 	public int getBeginPage() {
