@@ -61,17 +61,31 @@ public class BoardController {
 	@GetMapping("/list")
 	public String list(Model model, SearchVO search) {
 		
-		System.out.println("검색어: " + search.getKeyword());
+		String condition = search.getCondition();
 		
-		List<BoardVO> list = service.getArticleListByTitle(search);
-		
-		System.out.println("URL: /board/list GET -> result: " + list.size());
+		System.out.println("URL: /board/list GET -> result: ");
 		System.out.println("parameter(페이지 번호): " + search);
+		System.out.println("검색 조건: " + search.getCondition());
+		System.out.println("검색어: " + search.getKeyword());
 		
 		PageCreator pc = new PageCreator();
 		pc.setPaging(search);
-		pc.setArticleTotalCount(service.countArticlesByTitle(search));
-		//System.out.println(pc);
+		
+		List<BoardVO> list = service.getArticleList(search);
+		pc.setArticleTotalCount(service.countArticles(search));
+		
+		/*
+		if(condition.equals("title")) {
+			list = service.getArticleListByTitle(search);
+			pc.setArticleTotalCount(service.countArticlesByTitle(search));
+		} else if(condition.equals("writer")) {
+			list = service.getArticleListByWriter(search);
+			pc.setArticleTotalCount(service.countArticlesByWriter(search));
+		} else {
+			list = service.getArticleListPaging(search);
+			pc.setArticleTotalCount(service.countArticles());
+		}
+		*/
 		
 		model.addAttribute("articles", list);
 		model.addAttribute("pc", pc);
@@ -146,14 +160,7 @@ public class BoardController {
 		ra.addFlashAttribute("message", "modifySuccess");
 		return "redirect:/board/content/" + article.getBoardNo();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 
 }

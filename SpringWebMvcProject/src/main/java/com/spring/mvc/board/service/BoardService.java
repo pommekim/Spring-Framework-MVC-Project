@@ -22,29 +22,13 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public List<BoardVO> getArticleList() {
-		return mapper.getArticleList();
+	public List<BoardVO> getArticleList(SearchVO search) {
+		return mapper.getArticleList(search);
 	}
 	
 	@Override
-	public List<BoardVO> getArticleListPaging(PageVO paging) {
-//		page = (page - 1) * 10;
-		return mapper.getArticleListPaging(paging);
-	}
-	
-	@Override
-	public List<BoardVO> getArticleListByTitle(SearchVO search) {
-		return mapper.getArticleListByTitle(search);
-	}
-	
-	@Override
-	public int countArticlesByTitle(SearchVO search) {
-		return mapper.countArticlesByTitle(search);
-	}
-	
-	@Override
-	public int countArticles() {
-		return mapper.countArticles();
+	public int countArticles(SearchVO search) {
+		return mapper.countArticles(search);
 	}
 
 	@Override

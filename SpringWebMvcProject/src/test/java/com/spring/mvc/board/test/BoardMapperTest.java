@@ -43,7 +43,7 @@ public class BoardMapperTest {
 //		}
 		
 		//람다식 표현
-		mapper.getArticleList().forEach(vo -> System.out.println(vo));
+		//mapper.getArticleList().forEach(vo -> System.out.println(vo));
 		
 	}
 	
@@ -91,7 +91,7 @@ public class BoardMapperTest {
 		paging.setPage(2);
 		paging.setCountPerPage(10);
 		
-		mapper.getArticleListPaging(paging).forEach(vo -> System.out.println(vo));
+		//mapper.getArticleListPaging(paging).forEach(vo -> System.out.println(vo));
 		System.out.println("----------------------------------------------");
 	}
 	
