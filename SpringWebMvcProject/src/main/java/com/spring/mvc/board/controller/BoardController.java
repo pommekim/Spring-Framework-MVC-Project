@@ -112,7 +112,7 @@ public class BoardController {
 	
 	//글 상세보기 요청
 	@GetMapping("/content/{boardNo}")
-	public String content(@PathVariable int boardNo, Model model, @ModelAttribute("p") PageVO paging) {
+	public String content(@PathVariable int boardNo, Model model, @ModelAttribute("p") SearchVO paging) {
 		System.out.println("URL: /board/content -> GET");
 		System.out.println("parameter(글 번호): " + boardNo);
 		

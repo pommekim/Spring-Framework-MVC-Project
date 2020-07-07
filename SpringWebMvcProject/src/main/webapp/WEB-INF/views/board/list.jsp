@@ -70,9 +70,13 @@ header.masthead {
 								<td>${a.boardNo}</td>
 								<td>${a.writer}</td>
 
-								<td><a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content/${a.boardNo}?page=${pc.paging.page}&countPerPage=${pc.paging.countPerPage}'/>">
+								<td><a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content/${a.boardNo}${param.page == null ? pc.makeURI(1) : pc.makeURI(param.page)}'/>">
 										${a.title}
 									</a>
+									&nbsp;
+									<c:if test="${a.newMark}">
+										<span class="badge badge-pill badge-danger">new</span>
+									</c:if>
 								</td>
 
 								<td>
