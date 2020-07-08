@@ -1,5 +1,7 @@
 package com.spring.mvc.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +18,33 @@ public class UserService implements IUserService {
 	public void register(UserVO user) {
 		mapper.register(user);
 	}
+	
+	@Override
+	public int checkId(String account) {
+		return mapper.checkId(account);
+	}
+	
+	@Override
+	public void delete(String account) {
+		mapper.delete(account);
+	}
+	
+	@Override
+	public UserVO selectOne(String account) {
+		return mapper.selectOne(account);
+	}
+	
+	@Override
+	public List<UserVO> selectAll() {
+		return mapper.selectAll();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
