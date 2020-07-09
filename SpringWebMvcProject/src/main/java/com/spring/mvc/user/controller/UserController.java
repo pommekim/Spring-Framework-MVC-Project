@@ -2,7 +2,11 @@ package com.spring.mvc.user.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.mvc.user.model.UserVO;
 import com.spring.mvc.user.service.IUserService;
@@ -53,6 +58,70 @@ public class UserController {
 		
 		return result;
 	}
+	
+	//로그인 요청 처리
+	@PostMapping("/loginCheck")
+	public String loginCheck(@RequestBody UserVO inputData, HttpSession session /*HttpServletRequest request*/) {
+		
+		//서버에서 세션객체를 얻는 방법.
+		//1. HttpServletRequest객체 사용
+//		HttpSession session = request.getSession();
+		
+		
+		/*
+		 # 클라이언트가 전송한 id값과 pw값을 가지고 DB에서 회원의 정보를
+		 조회해서 불러온 다음 값 비교를 통해
+		 1. 아이디가 없을 경우 클라이언트 쪽으로 문자열 "idFail" 전송.
+		 2. 비밀번호가 틀렸을 경우 문자열 "pwFail" 전송.
+		 3. 로그인 성공 시 문자열 "loginSuccess" 전송.
+		 */
+		
+		String result = null;
+		
+		System.out.println("/user/loginCheck : POST 요청!");
+		System.out.println("Parameter: " + inputData);
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		UserVO dbData = service.selectOne(inputData.getAccount());
+		
+		if(dbData != null) {
+			if(encoder.matches(inputData.getPassword(), dbData.getPassword())) {
+				session.setAttribute("login", dbData);
+				result = "loginSuccess";
+			} else {
+				result = "pwFail";
+			}
+		} else {
+			result = "idFail";
+		}
+		
+		return result;
+	}
+	
+	//로그아웃 요청 처리
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpSession session) {
+		
+		System.out.println("/user/logout : GET 요청!");
+		
+		UserVO user = (UserVO) session.getAttribute("login");
+		
+		if(user != null) {
+			session.removeAttribute("login");
+			session.invalidate();
+		}
+		
+		//REST api 컨트롤러에서 원하는 페이지로 바로 이동시켜주기 위해 ModelAndView 사용!!!
+		return new ModelAndView("redirect:/");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//회원 탈퇴 요청 처리

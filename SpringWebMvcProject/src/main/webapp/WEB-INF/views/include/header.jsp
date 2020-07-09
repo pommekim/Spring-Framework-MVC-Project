@@ -127,19 +127,22 @@
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="<c:url value='/board/list'/>">BOARD</a>
           </li>
-          <c:if test="${login == null}" >
+          
+          <c:if test="${empty sessionScope.login}" >
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" data-toggle="modal" data-target="#log-in">LOGIN</a>
           </li>
           </c:if>
-         <c:if test="${login != null}" >
+          
+         <c:if test="${not empty sessionScope.login}" >
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#">MYPAGE</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#" onclick="return confirm('진짜로 로그아웃 하는거에요?')">LOGOUT</a>
+            <a class="nav-link js-scroll-trigger" href="/user/logout" onclick="return confirm('정말로 로그아웃 하시겠습니까?')">LOGOUT</a>
           </li>
           </c:if>
+          
         </ul>
       </div>
     </div>
@@ -148,13 +151,16 @@
   <!-- Header -->
   <header class="masthead">
     <div class="container">
-      <div class="intro-text">        
+      <div class="intro-text">
+              
     <c:if test="${login == null}" >
         <button class="btn btn-chu btn-xl text-uppercase js-scroll-trigger" data-toggle="modal" data-target="#log-in">CHU~♥</button>
     </c:if>
+    
     <c:if test="${login != null}" >
-    	 <a class="btn btn-chu btn-xl text-uppercase js-scroll-trigger" href="#">???님 안녕~</a>
+    	 <a class="btn btn-chu btn-xl text-uppercase js-scroll-trigger" href="#">${sessionScope.login.name}님 안녕~♥</a>
     </c:if>
+    
       </div>
     </div>
   </header>

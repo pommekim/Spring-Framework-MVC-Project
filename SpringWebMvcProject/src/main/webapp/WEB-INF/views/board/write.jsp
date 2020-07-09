@@ -20,7 +20,8 @@ header.masthead {
         
           <div class="form-group">
             <label>작성자</label>
-            <input type="text" class="form-control" name='writer'>
+            <%-- disabled는 태그 자체에 기능을 죽이는 것이기 때문에 readonly로 작성! --%>
+            <input type="text" class="form-control" name='writer' value="${sessionScope.login.name}" readonly>
           </div>
           
           <div class="form-group">
