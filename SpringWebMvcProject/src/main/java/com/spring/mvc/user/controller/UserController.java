@@ -1,8 +1,11 @@
 package com.spring.mvc.user.controller;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import com.spring.mvc.user.model.UserVO;
 import com.spring.mvc.user.service.IUserService;
@@ -61,7 +65,7 @@ public class UserController {
 	
 	//로그인 요청 처리
 	@PostMapping("/loginCheck")
-	public String loginCheck(@RequestBody UserVO inputData, HttpSession session /*HttpServletRequest request*/) {
+	public String loginCheck(@RequestBody UserVO inputData, HttpSession session, HttpServletResponse response /*HttpServletRequest request*/) {
 		
 		//서버에서 세션객체를 얻는 방법.
 		//1. HttpServletRequest객체 사용
@@ -88,6 +92,30 @@ public class UserController {
 			if(encoder.matches(inputData.getPassword(), dbData.getPassword())) {
 				session.setAttribute("login", dbData);
 				result = "loginSuccess";
+				
+				long limitTime = 60 * 60 * 24 * 90;
+				
+				//자동 로그인 체크시 처리해야 할 내용.
+				if(inputData.isAutoLogin()) {
+					System.out.println("자동 로그인 쿠키 생성 중...");
+					//세션 아이디를 만들어진 쿠키에 넣어줌!!!
+					Cookie loginCookie = new Cookie("loginCookie", session.getId());
+					//우리가 만든 쿠키가 어떤 경로에서든 사용할 수 있게끔 path를 지정
+					//이 속성을 지정하지 않으면 쿠키가 만들어진 그 경로 안에서만 쿠키를 사용할 수 있음
+					loginCookie.setPath("/");
+					//쿠키 수명 지정
+					loginCookie.setMaxAge((int) limitTime);
+					//응답 객체에 쿠키를 실어야 함
+					response.addCookie(loginCookie);
+					
+					//자동로그인 유지시간을 날짜 객체로 변환
+					long expiredDate = System.currentTimeMillis() + (limitTime * 1000);
+					//Data객체의 생성자에 매개값으로 밀리초의 시간을 전달하면 날짜로 변환해 줍니다.
+					Date limitDate = new Date(expiredDate);
+					
+					service.keepLogin(session.getId(), limitDate, inputData.getAccount());
+				}
+				
 			} else {
 				result = "pwFail";
 			}
@@ -100,7 +128,7 @@ public class UserController {
 	
 	//로그아웃 요청 처리
 	@GetMapping("/logout")
-	public ModelAndView logout(HttpSession session) {
+	public ModelAndView logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		
 		System.out.println("/user/logout : GET 요청!");
 		
@@ -109,6 +137,14 @@ public class UserController {
 		if(user != null) {
 			session.removeAttribute("login");
 			session.invalidate();
+			
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+			if(loginCookie != null) {
+				loginCookie.setMaxAge(0);
+				response.addCookie(loginCookie);
+				service.keepLogin("none", new Date(), user.getAccount());
+			}
+			
 		}
 		
 		//REST api 컨트롤러에서 원하는 페이지로 바로 이동시켜주기 위해 ModelAndView 사용!!!

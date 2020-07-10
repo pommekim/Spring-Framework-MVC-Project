@@ -29,5 +29,39 @@
 	<context:component-scan base-package="com.spring.mvc" />
 	
 	
+	<!-- 인터셉터 빈 등록 -->
+	<beans:bean id="testInterceptor" class="com.spring.mvc.commons.interceptor.TestInterceptor" />
+	<beans:bean id="boardInterceptor" class="com.spring.mvc.commons.interceptor.BoardInterceptor" />
+	<beans:bean id="autoLoginInterceptor" class="com.spring.mvc.commons.interceptor.AutoLoginInterceptor" />
+	
+	<!-- 인터셉터는 get요청만 관여할 수 있음!!! post는 불가능!!! -->
+	<interceptors>
+		<interceptor>
+			<!-- 어떤 요청이 들어왔을 때 동작을 시킬 것인지 명시 -->
+			<mapping path="/test1"/>
+			<mapping path="/test2"/>
+			<!-- 위에 등록한 빈을 참조 -->
+			<beans:ref bean="testInterceptor" />
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/board/write"/>
+			<mapping path="/board/modify"/>
+			<mapping path="/board/content/*"/>
+			<beans:ref bean="boardInterceptor"/>
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/"/>
+			<beans:ref bean="autoLoginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
+	
+	
+	
+	
+	
+	
 	
 </beans:beans>

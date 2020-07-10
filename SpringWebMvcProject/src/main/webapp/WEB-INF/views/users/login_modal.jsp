@@ -46,6 +46,16 @@
 								style="ime-mode: inactive; margin-bottom: 25px; height: 40px; border: 1px solid #d9d9de"
 								placeholder="최소 8자"></td>
 						</tr>
+						
+						<!-- 자동 로그인 체크박스 -->
+						<tr>
+							<td>
+								<input type="checkbox" id="auto-login" name="autoLogin"> 자동 로그인
+							</td>
+						</tr>
+						
+						
+						
 						<tr>
 							<td style="padding-top: 10px; text-align: center">
 								<p><strong>로그인하셔서 WIZONE이 되어보세요~~!</strong></p>
@@ -432,13 +442,18 @@ $(function() {
 			const id = $("#signInId").val();
 			const pw = $("#signInPw").val();
 			
+			//is()함수는 상태 여부를 판단하여 논리값을 리턴합니다.
+			const autoLogin = $("input[name=autoLogin]").is(":checked");
+			
 			console.log("id: " + id);
 			console.log("pw: " + pw);
+			console.log("auto: " + autoLogin);
 			
 			//자바스크립트 객체 생성
 			const user = {
 					account: id,
-					password: pw
+					password: pw,
+					autoLogin: autoLogin
 			};
 			
 			//ajax

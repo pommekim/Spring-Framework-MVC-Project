@@ -42,12 +42,16 @@ header.masthead {
           <input type="button" value="목록" class="btn" id="list-btn"
 		style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">&nbsp;&nbsp;
           
+          <c:if test="${sessionScope.login.name == article.writer}">
+          
           <input id="modBtn" type="button" value="수정" class="btn btn-warning"
 		style="background-color: orange; margin-top: 0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">&nbsp;&nbsp;
           
           <input type="submit" value="삭제" class="btn btn-danger" onclick="return confirm('정말로 삭제하시겠습니까?')"
 		style="background-color: red; margin-top: 0; height: 40px; color: white; border: 0px solid #388E3C; opacity: 0.8">&nbsp;&nbsp;
         
+          </c:if>
+          
         </form>
 
 
